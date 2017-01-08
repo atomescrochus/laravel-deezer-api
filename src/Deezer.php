@@ -14,6 +14,8 @@ class Deezer
     private $search_query;
     private $strict_mode;
     private $request_url;
+    private $advanced_search;
+    private $search_type;
 
     public function __construct()
     {
@@ -21,23 +23,75 @@ class Deezer
         $this->cache_time = 60; // in minutes
         $this->search_query = null;
         $this->endpoint = null;
+        $this->search_type = null;
         $this->strict_mode = "off";
+        $this->advanced_search = collect([]);
 
         $this->possible_search_types = ['album', 'artist', 'history', 'playlist', 'radio', 'track', 'user'];
     }
 
-    public function basicSearch($searchTerms, $type = 'artist')
+    public function artist(string $terms)
     {
-        $this->checkSearchType($type);
+        $this->advanced_search['artist'] = $terms;
 
-        $this->endpoint = "/search/{$type}";
+        return $this;
+    }
+
+    public function album(string $terms)
+    {
+        $this->advanced_search['album'] = $terms;
+
+        return $this;
+    }
+
+    public function track(string $terms)
+    {
+        $this->advanced_search['track'] = $terms;
+
+        return $this;
+    }
+
+    public function label(string $terms)
+    {
+        $this->advanced_search['label'] = $terms;
+
+        return $this;
+    }
+
+    public function minimumDuration($terms)
+    {
+        $this->advanced_search['dur_min'] = $terms;
+
+        return $this;
+    }
+
+    public function maximumDuration(int $terms)
+    {
+        $this->advanced_search['dur_max'] = $terms;
+
+        return $this;
+    }
+
+    public function minimumBPM(int $terms)
+    {
+        $this->advanced_search['dur_max'] = $terms;
+
+        return $this;
+    }
+
+    public function maximumBPM(int $terms)
+    {
+        $this->advanced_search['dur_max'] = $terms;
+
+        return $this;
+    }
+
+    public function basicSearch($searchTerms)
+    {
+        $this->endpoint = "/search/";
         $this->search_query = $searchTerms;
 
-        $results = Cache::remember("basic-search-{$type}-strict-{$this->strict_mode}-{$searchTerms}", $this->cache_time, function () {
-            return $this->executeSearch();
-        });
-
-        return $results;
+        return $this->search(false);
     }
 
     public function strictMode()
@@ -54,6 +108,15 @@ class Deezer
         return $this;
     }
 
+    public function type($type)
+    {
+        $this->checkSearchType($type);
+
+        $this->search_type = $type;
+
+        return $this;
+    }
+
     private function checkSearchType($type)
     {
         if (!in_array($type, $this->possible_search_types)) {
@@ -65,17 +128,43 @@ class Deezer
         }
     }
 
-    private function executeSearch()
+    public function search($advanced = true)
     {
+        if ($advanced) {
+            $this->prepareAdvancedSearch();
+        }
         $response = \Httpful\Request::get(
             $this->request_url.
             $this->endpoint.
+            $this->search_type.
             "?q=".
             $this->search_query.
             "&strict={$this->strict_mode}"
         )->send();
 
-        return $this->formatApiResults($response);
+        $results =  Cache::remember("basic-search-query-$this->search_query-strict-{$this->strict_mode}", $this->cache_time, function () use ($response) {
+            return $this->formatApiResults($response);
+        });
+
+        return $results;
+    }
+
+    private function prepareAdvancedSearch()
+    {
+        if ($this->advanced_search->count() == 0) {
+            throw UsageErrors::advancedSearchMissingTerms();
+        } else {
+            // http://api.deezer.com/search?q=artist:"aloe blacc" track:"i need a dollar"
+            // https://api.deezer.com?q=artist:"Les goules" track:"crabe"&strict=off
+            $this->endpoint = "/search/";
+
+            $query = $this->advanced_search->map(function ($query, $key) {
+                return $key.':"'.$query.'"';
+            })->implode(" ");
+
+            $this->search_query = rawurlencode($query);
+            // dd($this->search_query);
+        }
     }
 
     private function formatApiResults($result)

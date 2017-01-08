@@ -1,12 +1,12 @@
-# Interact with the Deezer Web API
+# Search the Deezer Web API
 
-[![Latest Stable Version](https://poser.pugx.org/atomescrochus/laravel-gracenote/v/stable)](https://packagist.org/packages/atomescrochus/laravel-gracenote)
-[![License](https://poser.pugx.org/atomescrochus/laravel-gracenote/license)](https://packagist.org/packages/atomescrochus/laravel-gracenote)
-[![Total Downloads](https://poser.pugx.org/atomescrochus/laravel-gracenote/downloads)](https://packagist.org/packages/atomescrochus/laravel-gracenote)
+[![Latest Stable Version](https://poser.pugx.org/atomescrochus/laravel-deezer-api/v/stable)](https://packagist.org/packages/atomescrochus/laravel-deezer-api)
+[![License](https://poser.pugx.org/atomescrochus/laravel-deezer-api/license)](https://packagist.org/packages/atomescrochus/laravel-deezer-api)
+[![Total Downloads](https://poser.pugx.org/atomescrochus/laravel-deezer-api/downloads)](https://packagist.org/packages/atomescrochus/laravel-deezer-api)
 
-The `atomescrochus/laravel-deezer-api` package provide and easy way to interact with the Gracenote Web API from any Laravel >= 5.3 application.
+The `atomescrochus/laravel-deezer-api` package provide and easy way to search the Deezer Web API from any Laravel >= 5.3 application.
 
-This package is **not** usable in production yet, it is a work in progress (contribution welcomed!). It requires PHP >= `7.0`.
+This package is usable in production, but should still be considered a work in progress (contribution welcomed!). It requires PHP >= `7.0`.
 
 ## Install
 
@@ -34,14 +34,25 @@ Then you have to install the package' service provider and alias:
 // here is an example query to search Deezer's API
 $deezer = new \Atomescrochus\Deezer\Deezer();
 
-// Execute a basic keywork search
-// second argument is optional, defaults to 'track'
-// see http://developers.deezer.com/api/search#connections for possible search types
-$results = $deezer->basicSearch("yolo", $type);
+// You can execute a basic search, and hope for the best
+$results = $deezer->basicSearch("yolo");
+
+// But you can also execute more complex search
+$deezer->artist() // string
+        ->album() // string
+        ->track() // string
+        ->label() // string
+        ->minimumDuration() // int
+        ->maximumDuration() // int
+        ->minimumBPM() // int
+        ->maximumBPM() // int
+        ->search();
 
 // Thees are the options you can set
 $deezer->cache(120) // an integer (number of minutes), for the cache to expire, can be 0
 $deezer->strictMode() // deactivate fuzzy searching on Deezer's side
+$deezer->type('track') // defaults to track if not set. 
+// see http://developers.deezer.com/api/search#connections for possible search types
 ```
 
 ## Tests
