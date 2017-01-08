@@ -4,7 +4,7 @@ namespace Atomescrochus\Deezer;
 
 use Illuminate\Support\ServiceProvider;
 
-class LaravelDeezerApiServiceProvider extends ServiceProvider
+class DeezerApiServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
