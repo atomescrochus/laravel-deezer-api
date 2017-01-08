@@ -4,7 +4,7 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-## Unreleased - YYYY-MM-DD
+## 0.1.0 - 2017-01-07
 
 ### Added
 - Ability to do a `basicSearch()` against the Deezer API;
