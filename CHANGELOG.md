@@ -4,6 +4,10 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+# 1.3.1 - 2017-01-08
+## Added
+- New name for cache object, reflecting the current string, for better caching identification
+
 # 1.3.0 - 2017-01-08
 ## Added
 - Added a `getTrackById()` to retreive a track directly by it's Deezer ID

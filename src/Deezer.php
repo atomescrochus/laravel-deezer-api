@@ -168,7 +168,7 @@ class Deezer
         
         $response = \Httpful\Request::get($this->getRequestUrl())->send();
 
-        $results =  Cache::remember("basic-search-query-$this->search_query-strict-{$this->strict_mode}", $this->cache_time, function () use ($response) {
+        $results =  Cache::remember("{$this->getRequestUrl()}", $this->cache_time, function () use ($response) {
             return $this->formatApiResults($response);
         });
 
