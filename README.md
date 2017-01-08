@@ -61,7 +61,7 @@ In the example above, what is returned in `$results` is an object containing: a 
 
 ## Tests
 
-Incoming.
+This is basically a wrapper around the API. We're assuming the Deezer API has been tested, and we won't duplicated tests.
 
 ## Change log
 
