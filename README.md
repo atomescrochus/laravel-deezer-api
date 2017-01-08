@@ -1,8 +1,8 @@
 # Interact with the Deezer Web API
 
-[![Latest Stable Version](https://poser.pugx.org/atomescrochus/laravel-gracenote/v/stable)](https://packagist.org/packages/atomescrochus/laravel-gracenote)
-[![License](https://poser.pugx.org/atomescrochus/laravel-gracenote/license)](https://packagist.org/packages/atomescrochus/laravel-gracenote)
-[![Total Downloads](https://poser.pugx.org/atomescrochus/laravel-gracenote/downloads)](https://packagist.org/packages/atomescrochus/laravel-gracenote)
+[![Latest Stable Version](https://poser.pugx.org/atomescrochus/laravel-deezer-api/v/stable)](https://packagist.org/packages/atomescrochus/laravel-deezer-api)
+[![License](https://poser.pugx.org/atomescrochus/laravel-deezer-api/license)](https://packagist.org/packages/atomescrochus/laravel-deezer-api)
+[![Total Downloads](https://poser.pugx.org/atomescrochus/laravel-deezer-api/downloads)](https://packagist.org/packages/atomescrochus/laravel-deezer-api)
 
 The `atomescrochus/laravel-deezer-api` package provide and easy way to interact with the Gracenote Web API from any Laravel >= 5.3 application.
 
