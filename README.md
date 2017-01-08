@@ -22,18 +22,27 @@ Then you have to install the package' service provider and alias:
 // config/app.php
 'providers' => [
     ...
-    Atomescrochus\Gracenote\LaravelDeezerApiServiceProvider::class,
-];
-
-'aliases' => [
-    ....
-    'DeezerAPI' => Atomescrochus\Gracenote\Facades\Deezer::class,
+    Atomescrochus\Deezer\DeezerApiServiceProvider::class,
 ];
 ```
 
 ## Usage
 
-Incoming.
+``` php
+// $results will be an object containing a collection of results and raw response data from Deezer
+
+// here is an example query to search Deezer's API
+$deezer = new \Atomescrochus\Deezer\Deezer();
+
+// Execute a basic keywork search
+// second argument is optional, defaults to 'track'
+// see http://developers.deezer.com/api/search#connections for possible search types
+$results = $deezer->basicSearch("yolo", $type);
+
+// Thees are the options you can set
+$deezer->cache(120) // an integer (number of minutes), for the cache to expire, can be 0
+$deezer->strictMode() // deactivate fuzzy searching on Deezer's side
+```
 
 ## Tests
 
