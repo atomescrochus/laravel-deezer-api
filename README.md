@@ -35,6 +35,9 @@ $deezer = new \Atomescrochus\Deezer\Deezer();
 // You can execute a basic search, and hope for the best
 $results = $deezer->basicSearch("yolo");
 
+// If you already have a Deezer ID, you can do thise to get the track
+$results = $deezer->getTrackById(18042083); //
+
 // But you can also execute more complex search
 $results = $deezer->artist() // string
         ->album() // string
@@ -46,8 +49,10 @@ $results = $deezer->artist() // string
         ->maximumBPM() // int
         ->search();
 
-// Thees are the options you can set
+// These are the options you can set with every kind of call
 $deezer->cache(120) // an integer (number of minutes), for the cache to expire, can be 0
+
+// Theses are options compatible with basicSearch() and complexe searches
 $deezer->strictMode() // deactivate fuzzy searching on Deezer's side
 $deezer->type('track') // defaults to track if not set. 
 // see http://developers.deezer.com/api/search#connections for possible search types
