@@ -178,7 +178,9 @@ class Deezer
 
         return (object) [
             'results' => collect($response->data),
+            'count' => $result->body->total,
             'raw' => json_decode($raw),
+            'query' => urldecode($this->endpoint.$this->search_type."?q=".$this->search_query."&strict={$this->strict_mode}"),
         ];
     }
 }
