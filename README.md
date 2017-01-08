@@ -29,8 +29,6 @@ Then you have to install the package' service provider and alias:
 ## Usage
 
 ``` php
-// $results will be an object containing a collection of results and raw response data from Deezer
-
 // here is an example query to search Deezer's API
 $deezer = new \Atomescrochus\Deezer\Deezer();
 
@@ -38,7 +36,7 @@ $deezer = new \Atomescrochus\Deezer\Deezer();
 $results = $deezer->basicSearch("yolo");
 
 // But you can also execute more complex search
-$deezer->artist() // string
+$results = $deezer->artist() // string
         ->album() // string
         ->track() // string
         ->label() // string
@@ -53,7 +51,13 @@ $deezer->cache(120) // an integer (number of minutes), for the cache to expire, 
 $deezer->strictMode() // deactivate fuzzy searching on Deezer's side
 $deezer->type('track') // defaults to track if not set. 
 // see http://developers.deezer.com/api/search#connections for possible search types
+$deezer->order('ranking') // defaults to ranking if not set. Use lower case!
+// see http://developers.deezer.com/api/search#infos for possible order
 ```
+
+### Results
+ 
+In the example above, what is returned in `$results` is an object containing: a collection of results; a count value for the results; raw response data; and the unformatted query sent to the API.
 
 ## Tests
 

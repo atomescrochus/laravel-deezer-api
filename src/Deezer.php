@@ -16,6 +16,8 @@ class Deezer
     private $request_url;
     private $advanced_search;
     private $search_type;
+    private $order;
+    private $possible_order;
 
     public function __construct()
     {
@@ -24,10 +26,12 @@ class Deezer
         $this->search_query = null;
         $this->endpoint = null;
         $this->search_type = null;
+        $this->order = 'ranking';
         $this->strict_mode = "off";
         $this->advanced_search = collect([]);
 
         $this->possible_search_types = ['album', 'artist', 'history', 'playlist', 'radio', 'track', 'user'];
+        $this->possible_order = ['ranking', 'track_asc', 'track_desc', 'artist_asc', 'artist_desc', 'album_asc', 'album_desc', 'rating_asc', 'rating_desc', 'duration_asc', 'duration_desc'];
     }
 
     public function artist(string $terms)
@@ -117,6 +121,15 @@ class Deezer
         return $this;
     }
 
+    public function order($order)
+    {
+        $this->checkOrder($order);
+
+        $this->order = $order;
+
+        return $this;
+    }
+
     private function checkSearchType($type)
     {
         if (!in_array($type, $this->possible_search_types)) {
@@ -128,25 +141,36 @@ class Deezer
         }
     }
 
+    private function checkOrder($order)
+    {
+        if (!in_array($order, $this->possible_order)) {
+            throw UsageErrors::order();
+        }
+    }
+
     public function search($advanced = true)
     {
         if ($advanced) {
             $this->prepareAdvancedSearch();
         }
-        $response = \Httpful\Request::get(
-            $this->request_url.
-            $this->endpoint.
-            $this->search_type.
-            "?q=".
-            $this->search_query.
-            "&strict={$this->strict_mode}"
-        )->send();
+
+        $response = \Httpful\Request::get($this->getRequestUrl())->send();
 
         $results =  Cache::remember("basic-search-query-$this->search_query-strict-{$this->strict_mode}", $this->cache_time, function () use ($response) {
             return $this->formatApiResults($response);
         });
 
         return $results;
+    }
+
+    private function getRequestUrl()
+    {
+        return  $this->request_url.
+                $this->endpoint.
+                $this->search_type.
+                "?q=".$this->search_query.
+                "&strict={$this->strict_mode}".
+                "&order={$this->order}";
     }
 
     private function prepareAdvancedSearch()
@@ -178,7 +202,9 @@ class Deezer
 
         return (object) [
             'results' => collect($response->data),
+            'count' => $result->body->total,
             'raw' => json_decode($raw),
+            'query' => urldecode($this->getRequestUrl()),
         ];
     }
 }
