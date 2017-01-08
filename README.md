@@ -34,14 +34,25 @@ Then you have to install the package' service provider and alias:
 // here is an example query to search Deezer's API
 $deezer = new \Atomescrochus\Deezer\Deezer();
 
-// Execute a basic keywork search
-// second argument is optional, defaults to 'track'
-// see http://developers.deezer.com/api/search#connections for possible search types
-$results = $deezer->basicSearch("yolo", $type);
+// You can execute a basic search, and hope for the best
+$results = $deezer->basicSearch("yolo");
+
+// But you can also execute more complex search
+$deezer->artist() // string
+        ->album() // string
+        ->track() // string
+        ->label() // string
+        ->minimumDuration() // int
+        ->maximumDuration() // int
+        ->minimumBPM() // int
+        ->maximumBPM() // int
+        ->search();
 
 // Thees are the options you can set
 $deezer->cache(120) // an integer (number of minutes), for the cache to expire, can be 0
 $deezer->strictMode() // deactivate fuzzy searching on Deezer's side
+$deezer->type('track') // defaults to track if not set. 
+// see http://developers.deezer.com/api/search#connections for possible search types
 ```
 
 ## Tests

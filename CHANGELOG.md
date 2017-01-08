@@ -4,6 +4,13 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## Unreleased - 2017-01-07
+
+### Added
+- Can now set the search type with `type()` rather than passing it as an argument to `basicSearch()`
+- Can now make an advanced search, see readme for more details
+
+
 ## 0.1.0 - 2017-01-07
 
 ### Added
@@ -12,9 +19,6 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 - Ability to turn on strict mode for Deezer;
 - Usage errors exceptions
 - Unsupported search types exceptions
-
-### Security
-- Nothing
 
 ## Unreleased - YYYY-MM-DD
 

@@ -10,4 +10,9 @@ class UsageErrors extends Exception
     {
         return new static('This search type is invalid.');
     }
+
+    public static function advancedSearchMissingTerms()
+    {
+        return new static('You need to set something to search first.');
+    }
 }
