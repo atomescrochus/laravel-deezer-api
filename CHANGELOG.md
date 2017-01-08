@@ -4,6 +4,10 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+# 1.3.0 - 2017-01-08
+## Added
+- Added a `getTrackById()` to retreive a track directly by it's Deezer ID
+
 ## 1.2.0 - 2017-01-08
 ### Added
 - Added a `count` property to the result object for easy access
