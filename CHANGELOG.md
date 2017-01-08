@@ -8,6 +8,7 @@ Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) princip
 ### Added
 - Added a `count` property to the result object for easy access
 - Added a `query` property to the result object so we can inspect what has been sent easily
+- Ability to set the `order()` for the results
 
 ### Deprecated
 ### Fixed

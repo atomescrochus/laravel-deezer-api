@@ -51,6 +51,8 @@ $deezer->cache(120) // an integer (number of minutes), for the cache to expire, 
 $deezer->strictMode() // deactivate fuzzy searching on Deezer's side
 $deezer->type('track') // defaults to track if not set. 
 // see http://developers.deezer.com/api/search#connections for possible search types
+$deezer->order('ranking') // defaults to ranking if not set. Use lower case!
+// see http://developers.deezer.com/api/search#infos for possible order
 ```
 
 ### Results
