@@ -18,6 +18,7 @@ class Deezer
     private $search_type;
     private $order;
     private $possible_order;
+    private $multipleTrackPossible;
 
     public function __construct()
     {
@@ -29,6 +30,7 @@ class Deezer
         $this->order = 'ranking';
         $this->strict_mode = "off";
         $this->advanced_search = collect([]);
+        $this->multipleTrackPossible = true;
 
         $this->possible_search_types = ['album', 'artist', 'history', 'playlist', 'radio', 'track', 'user'];
         $this->possible_order = ['ranking', 'track_asc', 'track_desc', 'artist_asc', 'artist_desc', 'album_asc', 'album_desc', 'rating_asc', 'rating_desc', 'duration_asc', 'duration_desc'];
@@ -98,6 +100,16 @@ class Deezer
         return $this->search(false);
     }
 
+    public function getTrackById(int $id)
+    {
+        $this->endpoint = "/track/".$id;
+        $this->strict_mode = "off";
+        $this->order = null;
+        $this->multipleTrackPossible = false;
+
+        return $this->search(false);
+    }
+
     public function strictMode()
     {
         $this->strict_mode = "on";
@@ -153,7 +165,7 @@ class Deezer
         if ($advanced) {
             $this->prepareAdvancedSearch();
         }
-
+        
         $response = \Httpful\Request::get($this->getRequestUrl())->send();
 
         $results =  Cache::remember("basic-search-query-$this->search_query-strict-{$this->strict_mode}", $this->cache_time, function () use ($response) {
@@ -165,12 +177,16 @@ class Deezer
 
     private function getRequestUrl()
     {
+        $query = !is_null($this->search_query) ? "?q=".$this->search_query : null;
+        $strict = $this->strict_mode == "on" ? "&strict={$this->strict_mode}" : null;
+        $order = !is_null($this->order) ? "&order={$this->order}" : null;
+
         return  $this->request_url.
                 $this->endpoint.
                 $this->search_type.
-                "?q=".$this->search_query.
-                "&strict={$this->strict_mode}".
-                "&order={$this->order}";
+                $query.
+                $strict.
+                $order;
     }
 
     private function prepareAdvancedSearch()
@@ -193,6 +209,7 @@ class Deezer
 
     private function formatApiResults($result)
     {
+        
         if (isset($result->body->error)) {
             return $result->body;
         }
@@ -200,9 +217,12 @@ class Deezer
         $raw = $result->raw_body;
         $response = $result->body ? $result->body : null;
 
+        $results = $this->multipleTrackPossible ? $response->data : $response;
+        $count = $this->multipleTrackPossible ? $result->body->total : 1;
+
         return (object) [
-            'results' => collect($response->data),
-            'count' => $result->body->total,
+            'results' => collect($results),
+            'count' => $count,
             'raw' => json_decode($raw),
             'query' => urldecode($this->getRequestUrl()),
         ];
