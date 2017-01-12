@@ -4,6 +4,10 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+# 1.3.2 - 2017-01-12
+## Added
+- Now use a hash to name cache objects
+
 # 1.3.1 - 2017-01-08
 ## Added
 - New name for cache object, reflecting the current string, for better caching identification

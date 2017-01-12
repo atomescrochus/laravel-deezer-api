@@ -168,7 +168,9 @@ class Deezer
         
         $response = \Httpful\Request::get($this->getRequestUrl())->send();
 
-        $results =  Cache::remember("{$this->getRequestUrl()}", $this->cache_time, function () use ($response) {
+        $cache_name = bcrypt($this->getRequestUrl());
+        
+        $results =  Cache::remember($cache_name, $this->cache_time, function () use ($response) {
             return $this->formatApiResults($response);
         });
 
