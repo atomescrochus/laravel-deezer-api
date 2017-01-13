@@ -4,7 +4,11 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
-# 1.3.3 - 2017-01-12
+# 1.3.4 - 2017-01-13
+## Added
+- Optimizing cache usage vs API request
+
+# 1.3.3 - 2017-01-13
 ## Added
 - Named object is md5-ed
 
