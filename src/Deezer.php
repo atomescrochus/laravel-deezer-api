@@ -165,16 +165,19 @@ class Deezer
         if ($advanced) {
             $this->prepareAdvancedSearch();
         }
-        
-        $response = \Httpful\Request::get($this->getRequestUrl())->send();
 
         $cache_name = md5($this->getRequestUrl());
-        
-        $results =  Cache::remember($cache_name, $this->cache_time, function () use ($response) {
-            return $this->formatApiResults($response);
-        });
+        $cached_response = Cache::has($cache_name);
 
-        return $results;
+        if ($cached_response) {
+            return Cache::get($cache_name);
+        }
+        
+        $response = \Httpful\Request::get($this->getRequestUrl())->send();
+        
+        return  Cache::remember($cache_name, $this->cache_time, function () use ($response) {
+            return $this->formatApiResults($response, true);
+        });
     }
 
     private function getRequestUrl()
@@ -209,7 +212,7 @@ class Deezer
         }
     }
 
-    private function formatApiResults($result)
+    private function formatApiResults($result, $cached)
     {
         
         if (isset($result->body->error)) {
@@ -225,6 +228,7 @@ class Deezer
         return (object) [
             'results' => collect($results),
             'count' => $count,
+            'cached' => $cached,
             'raw' => json_decode($raw),
             'query' => urldecode($this->getRequestUrl()),
         ];
