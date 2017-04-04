@@ -110,6 +110,16 @@ class Deezer
         return $this->search(false);
     }
 
+    public function getAlbumById(int $id)
+    {
+        $this->endpoint = "/album/".$id;
+        $this->strict_mode = "off";
+        $this->order = null;
+        $this->multipleTrackPossible = false;
+
+        return $this->search(false);
+    }
+
     public function strictMode()
     {
         $this->strict_mode = "on";
