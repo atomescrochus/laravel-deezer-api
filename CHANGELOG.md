@@ -4,6 +4,10 @@ All Notable changes to `laravel-deezer-api` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## 1.5.1 - 2017-10-09
+### Fix
+- Auto-discovery
+
 ## 1.5.0 - 2017-10-09
 ### Added
 Support for Laravel 5.5 package autodiscovery.
